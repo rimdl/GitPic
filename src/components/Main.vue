@@ -1,33 +1,21 @@
 <template>
-  <el-row>
-   <el-col :span="24">
-     <el-menu
-         class="nav"
-         mode="horizontal"
-         :ellipsis="false"
-     >
-       <el-menu-item index="0">
-         <img
-             style="width: 50px;border-radius: 10px"
-             src="../../public/logo.jpg"
-             alt="GitPic"
-         />
-         <span style="font-size: 50px;color: rgba(255, 220, 52);font-weight: bolder">G</span>
-         <span style="font-size: 50px;color: rgba(72, 201, 255);font-weight: bolder">it</span>
-         <span style="font-size: 50px;color: rgba(141, 114, 255);font-weight: bolder">P</span>
-         <span style="font-size: 50px;color: rgba(189, 52, 254);font-weight: bolder">ic</span>
-       </el-menu-item>
-       <div class="flex-grow" />
-       <el-menu-item index="1">Processing Center</el-menu-item>
-       <el-sub-menu index="2">
-         <template #title>Workspace</template>
-         <el-menu-item index="2-1">item one</el-menu-item>
-         <el-menu-item index="2-2">item two</el-menu-item>
-         <el-menu-item index="2-3">item three</el-menu-item>
-
-       </el-sub-menu>
-     </el-menu>
-   </el-col>
+  <el-row class="nav">
+    <el-col :span="12">
+      <img
+          style="width: 50px;border-radius: 10px"
+          src="../../public/logo.jpg"
+          alt="GitPic"
+      />
+      <span style="font-size: 50px;color: rgba(255, 220, 52);font-weight: bolder">G</span>
+      <span style="font-size: 50px;color: rgba(72, 201, 255);font-weight: bolder">it</span>
+      <span style="font-size: 50px;color: rgba(141, 114, 255);font-weight: bolder">P</span>
+      <span style="font-size: 50px;color: rgba(189, 52, 254);font-weight: bolder">ic</span>
+    </el-col>
+    <el-col :span="12" style="text-align: right">
+<!--      <a href="https://github.com/rimdl/GitPic/" style="text-decoration: none;color: black;"><el-avatar :size="50" src="../../public/github2.svg" /></a>-->
+<!--      <a href="https://github.com/rimdl/GitPic/" style="text-decoration: none;color: black;"><img src="../../public/github2.svg" style="width: 30px" alt=""><br><span>github</span></a>-->
+      <a href="https://github.com/rimdl/GitPic/" target="_blank" style="text-decoration: none;color: black;"><el-button style="height: 100%;background-image: url('../../public/github2.svg');background-size: cover;border: none;border-radius: 50px" >github</el-button></a>
+    </el-col>
   </el-row>
   <el-row class="mg">
     <el-col :span="24">
@@ -452,6 +440,7 @@ watch(current_page,
   background-size: 300% 300%;
   border-radius: 10px;
   font-weight: bold;
+  padding: 5px;
 }
 .btn{
   width: 100%;
