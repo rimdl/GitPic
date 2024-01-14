@@ -12,12 +12,16 @@
       <span style="font-size: 50px;color: rgba(189, 52, 254);font-weight: bolder">ic</span>
     </el-col>
     <el-col :span="12" style="text-align: right">
-      <a href="https://github.com/rimdl/GitPic/" target="_blank" style="text-decoration: none;color: black;"><el-button style="height: 100%;background-image: url('../../public/github.png');background-size: cover;border: none;border-radius: 50px" >github</el-button></a>
+      <a href="https://github.com/rimdl/GitPic/" target="_blank" style="text-decoration: none;color: black;">
+        <el-button class="nav_github_btn">github</el-button>
+      </a>
     </el-col>
   </el-row>
   <el-row class="mg">
     <el-col :span="24">
-      <el-alert title="提示：以下信息均会保存在浏览器本地，所以请务必提前备份，因GitHub获取的token只会显示一次，丢失后将无法恢复。" type="info" />
+      <el-alert
+          title="提示：以下信息均会保存在浏览器本地，所以请务必提前备份，因GitHub获取的token只会显示一次，丢失后将无法恢复。"
+          type="info"/>
     </el-col>
     <el-col :span="24">
       <br>
@@ -64,7 +68,9 @@
           :http-request="handleUpload"
           accept="image/*"
       >
-        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+        <el-icon class="el-icon--upload">
+          <upload-filled/>
+        </el-icon>
         <div class="el-upload__text">
           拖动文件到此处 或者 <em>点击上传</em>
         </div>
@@ -75,7 +81,9 @@
           </div>
           <el-progress v-if="show_progress" :percentage="50" :indeterminate="true" :format="format"/>
           <el-input placeholder="获取失败了哦！" v-model="d_url" type="text" id="durl" v-if="d_url !== ''">
-            <template #append><el-button @click="copy_url('durl')" class="copy_btn" type="primary">复制</el-button></template>
+            <template #append>
+              <el-button @click="copy_url('durl')" class="copy_btn" type="primary">复制</el-button>
+            </template>
           </el-input>
         </template>
       </el-upload>
@@ -86,16 +94,20 @@
     <el-col :span="6">
       <el-row>
         <el-col :span="22" :offset="1" style="text-align: center;padding: 10px" class="glass">
-          <a :href="'https://github.com/'+repo" target="_blank"><el-avatar :size="50" :src="avatar_url" /></a>
+          <a :href="'https://github.com/'+repo" target="_blank">
+            <el-avatar :size="50" :src="avatar_url"/>
+          </a>
           <br>
-          <span style="font-size: smaller;color: gray">{{name}}</span>
+          <span style="font-size: smaller;color: gray">{{ name }}</span>
           <br>
-          <span style="font-size: smaller;color: gray">{{email}}</span>
+          <span style="font-size: smaller;color: gray">{{ email }}</span>
           <br>
           <div v-if="total_size !== ''">
-            <span style="font-size: small;font-weight:bold;color: gray">当前仓库占用空间：<el-tag effect="dark" round>{{total_size}}</el-tag></span>
+            <span style="font-size: small;font-weight:bold;color: gray">当前仓库占用空间：<el-tag effect="dark"
+                                                                                                 round>{{ total_size }}</el-tag></span>
             <br>
-            <span style="font-size: small;font-weight:bold;color: gray">当前仓库文件数：<el-tag effect="dark" round>{{file_list.length}}</el-tag></span>
+            <span style="font-size: small;font-weight:bold;color: gray">当前仓库文件数：<el-tag effect="dark"
+                                                                                               round>{{ file_list.length }}</el-tag></span>
             <br>
             <br>
           </div>
@@ -115,11 +127,13 @@
       <el-row>
         <el-col :span="24">
           <el-tag>
-          <img src="../../public/tiger.svg" style="width: 20px" alt="">
-          <label>选择图片填充方式</label>
+            <img src="../../public/tiger.svg" style="width: 20px" alt="">
+            <label>选择图片填充方式</label>
           </el-tag>
           <el-button class="copy_btn" @click="listFile" size="small" style="margin-left: 1vw;border-radius: 20px">
-            <el-icon class="is-loading"><Loading /></el-icon>
+            <el-icon class="is-loading">
+              <Loading/>
+            </el-icon>
             刷新
           </el-button>
           <br><br>
@@ -133,10 +147,12 @@
         </el-col>
       </el-row>
       <el-row class="mg">
-        <el-col v-for="(item,index) in file_show"  :span="4" style="padding: 10px">
-          <el-image :preview-teleported="true" style="width: 100%;height: 20vh" :src="item.url" :fit="fit" loading="lazy" :preview-src-list="srcList" :initial-index="index" :key="item.sha"/>
-          <span style="font-size: smaller;color: gray">文件大小：{{(item.size/1024).toFixed(2)}}KB</span>
-          <p style="color: gray;font-size: smaller;white-space: nowrap;width: 90%;overflow: hidden;text-overflow:ellipsis;">文件名：{{item.name}}</p>
+        <el-col v-for="(item,index) in file_show" :span="4" style="padding: 10px">
+          <el-image :preview-teleported="true" style="width: 100%;height: 20vh" :src="item.url" :fit="fit"
+                    loading="lazy" :preview-src-list="srcList" :initial-index="index" :key="item.sha"/>
+          <span style="font-size: smaller;color: gray">文件大小：{{ (item.size / 1024).toFixed(2) }}KB</span>
+          <p style="color: gray;font-size: smaller;white-space: nowrap;width: 90%;overflow: hidden;text-overflow:ellipsis;">
+            文件名：{{ item.name }}</p>
           <input type="text" v-model="item.url" :id="index" style="display: none">
           <el-row>
             <el-col :span="12">
@@ -152,7 +168,9 @@
                   @confirm="delete_file(item.sha,item.filename)"
               >
                 <template #reference>
-              <el-button type="default" size="small" style="border-radius: 10px"><img src="../../public/delete.svg" style="width: 15px" alt=""></el-button>
+                  <el-button type="default" size="small" style="border-radius: 10px"><img src="../../public/delete.svg"
+                                                                                          style="width: 15px" alt="">
+                  </el-button>
                 </template>
               </el-popconfirm>
             </el-col>
@@ -161,7 +179,8 @@
       </el-row>
       <el-row>
         <el-col :span="24" style="text-align: center">
-          <el-pagination background page-size="12" :hide-on-single-page="true" v-model:current-page="current_page" default-page-size="12" layout="prev, pager, next" :page-count="page_count"/>
+          <el-pagination background page-size="12" :hide-on-single-page="true" v-model:current-page="current_page"
+                         default-page-size="12" layout="prev, pager, next" :page-count="page_count"/>
         </el-col>
       </el-row>
     </el-col>
@@ -169,9 +188,9 @@
 </template>
 
 <script setup>
-import {onBeforeMount, onBeforeUpdate, ref,watch} from 'vue';
-import { UploadFilled } from '@element-plus/icons-vue'
-import { ElNotification } from 'element-plus'
+import {onBeforeMount, onBeforeUpdate, ref, watch} from 'vue';
+import {UploadFilled} from '@element-plus/icons-vue'
+import {ElNotification} from 'element-plus'
 
 const current_page = ref(1)
 const file_suffix = ref('');
@@ -198,7 +217,7 @@ const file_show = ref([])
 
 const page_count = ref(1)
 
-const clear_config = () =>{
+const clear_config = () => {
   localStorage.removeItem("repo")
   localStorage.removeItem("token")
   localStorage.removeItem("email")
@@ -227,32 +246,31 @@ const handleUpload = (content) => {
   }
 }
 
-const save_config = () =>{
-  if (input_repo.value !==null && input_token.value !== null){
-    localStorage.setItem("repo",input_repo.value);
-    localStorage.setItem("token",input_token.value);
-    localStorage.setItem("cdn",input_cdn.value);
+const save_config = () => {
+  if (input_repo.value !== null && input_token.value !== null) {
+    localStorage.setItem("repo", input_repo.value);
+    localStorage.setItem("token", input_token.value);
+    localStorage.setItem("cdn", input_cdn.value);
     repo.value = input_repo.value;
     token.value = input_token.value;
     get_user_info()
     listFile()
-  }
-  else {
-    open_notification("warning","请输入仓库地址和token")
+  } else {
+    open_notification("warning", "请输入仓库地址和token")
   }
 }
 
- onBeforeMount(() => {
-   input_repo.value = localStorage.getItem("repo");
-   input_token.value = localStorage.getItem("token");
-   input_cdn.value = localStorage.getItem("cdn");
-   repo.value = input_repo.value;
-   token.value = input_token.value;
-   avatar_url.value = localStorage.getItem("avatar")
-   name.value = localStorage.getItem("name")
-   email.value = localStorage.getItem("email")
-   listFile()
- })
+onBeforeMount(() => {
+  input_repo.value = localStorage.getItem("repo");
+  input_token.value = localStorage.getItem("token");
+  input_cdn.value = localStorage.getItem("cdn");
+  repo.value = input_repo.value;
+  token.value = input_token.value;
+  avatar_url.value = localStorage.getItem("avatar")
+  name.value = localStorage.getItem("name")
+  email.value = localStorage.getItem("email")
+  listFile()
+})
 
 onBeforeUpdate(() => {
 
@@ -263,25 +281,28 @@ const upload = (content) => {
   const UUID = crypto.randomUUID();
   const path = `${UUID}${file_suffix.value}`
   const imageUrl = 'https://api.github.com/repos/' + repo.value + '/contents/' + path
-  const body_data = { branch: 'main', message: 'upload', content, path }
+  const body_data = {branch: 'main', message: 'upload', content, path}
   const body = JSON.stringify(body_data);
   show_progress.value = true
   fetch(imageUrl, {
     method: 'PUT',
-    headers: {'Accept':'application/vnd.github+json','Authorization':'Bearer '+token.value,'X-GitHub-Api-Version': '2022-11-28'},
+    headers: {
+      'Accept': 'application/vnd.github+json',
+      'Authorization': 'Bearer ' + token.value,
+      'X-GitHub-Api-Version': '2022-11-28'
+    },
     body: body
   }).then(response => response.json()) // 如果服务器返回的是JSON数据，则进行解析
       .then(data => {
         console.log('PUT request succeeded with:', data)
         let download_url = data.content.download_url;
-        if (input_cdn.value !==""){
+        if (input_cdn.value !== "") {
           d_url.value = input_cdn.value + input_repo.value + download_url.substring(download_url.indexOf("/main"));
-        }
-        else {
+        } else {
           d_url.value = download_url
         }
         show_progress.value = false
-        open_notification("上传图片","上传成功！")
+        open_notification("上传图片", "上传成功！")
       })
       .catch(error => {
         console.error('Error:', error)
@@ -289,7 +310,7 @@ const upload = (content) => {
       });
 }
 
-const listFile = () =>{
+const listFile = () => {
   file_list.value = []
   const url = 'https://api.github.com/repos/' + repo.value + '/contents/'
   fetch(url, {
@@ -300,33 +321,35 @@ const listFile = () =>{
         console.log('Get request succeeded with:', data)
         let all_size = 0
         for (let i = 0; i < data.length; i++) {
-          if (input_cdn !== ""){
+          if (input_cdn !== "") {
             data[i].download_url = data[i].download_url.substring(data[i].download_url.indexOf("/main"))
-            file_list.value.push({"url":input_cdn.value + input_repo.value + data[i].download_url,"size":data[i].size,"name":data[i].name,"sha":data[i].sha,"filename":data[i].name})
+            file_list.value.push({
+              "url": input_cdn.value + input_repo.value + data[i].download_url,
+              "size": data[i].size,
+              "name": data[i].name,
+              "sha": data[i].sha,
+              "filename": data[i].name
+            })
             srcList.value.push(input_cdn.value + input_repo.value + data[i].download_url)
-            all_size =  all_size + data[i].size
+            all_size = all_size + data[i].size
           }
         }
-        if (all_size < 1024){
-          total_size.value = all_size+"B"
+        if (all_size < 1024) {
+          total_size.value = all_size + "B"
+        } else if (all_size >= 1024 && all_size < 1024 * 1024) {
+          total_size.value = (all_size / 1024).toFixed(2) + "KB"
+        } else if (all_size >= 1024 * 1024 && all_size < 1024 * 1024 * 1024) {
+          total_size.value = (all_size / (1024 * 1024)).toFixed(2) + "MB"
+        } else {
+          total_size.value = (all_size / (1024 * 1024 * 1024)).toFixed(2) + "GB"
         }
-        else if(all_size >= 1024 && all_size < 1024*1024){
-          total_size.value = (all_size/1024).toFixed(2)+"KB"
-        }
-        else if (all_size >= 1024*1024 && all_size < 1024*1024*1024){
-          total_size.value = (all_size/(1024*1024)).toFixed(2)+"MB"
-        }
-        else {
-          total_size.value = (all_size/(1024*1024*1024)).toFixed(2)+"GB"
-        }
-        console.log("size:"+total_size.value)
-        if (file_list.value.length <= 12){
+        console.log("size:" + total_size.value)
+        if (file_list.value.length <= 12) {
           file_show.value = file_list.value
           page_count.value = 1
-        }
-        else {
+        } else {
           file_show.value = file_list.value.slice(0, 12)
-          page_count.value = Math.ceil((file_list.value.length)/12)
+          page_count.value = Math.ceil((file_list.value.length) / 12)
         }
       })
       .catch(error => {
@@ -335,51 +358,54 @@ const listFile = () =>{
 }
 
 const copy_url = (index) => {
-  if (index !=="durl"){
+  if (index !== "durl") {
     let obj = document.getElementById(index);
     obj.select();
-    open_notification("复制url","已复制到剪贴板:"+obj.value)
+    open_notification("复制url", "已复制到剪贴板:" + obj.value)
 
     document.execCommand("copy");
-  }
-  else {
+  } else {
     if (d_url.value === "") {
-      open_notification("复制url","请先上传文件")
+      open_notification("复制url", "请先上传文件")
       return
     }
-    open_notification("复制url","已复制到剪贴板:"+d_url.value)
+    open_notification("复制url", "已复制到剪贴板:" + d_url.value)
     document.getElementById("durl").select();
     document.execCommand("copy");
   }
 }
 
-const delete_file = (sha,filename) => {
+const delete_file = (sha, filename) => {
   console.log(sha)
-  const url = 'https://api.github.com/repos/' + repo.value + '/contents/'+filename
-  let body = {message: "delete file",committer: {name: name.value,email: email.value},sha: sha}
+  const url = 'https://api.github.com/repos/' + repo.value + '/contents/' + filename
+  let body = {message: "delete file", committer: {name: name.value, email: email.value}, sha: sha}
   console.log(body)
   fetch(url, {
     method: 'DELETE',
     body: JSON.stringify(body),
-    headers: {'Accept':'application/vnd.github+json','Authorization':'Bearer '+token.value,'X-GitHub-Api-Version': '2022-11-28'},
+    headers: {
+      'Accept': 'application/vnd.github+json',
+      'Authorization': 'Bearer ' + token.value,
+      'X-GitHub-Api-Version': '2022-11-28'
+    },
   }).then(response => response.json()) // 如果服务器返回的是JSON数据，则进行解析
       .then(data => {
         console.log('Delete request succeeded with:', data)
         let f_obj = file_list.value.find(obj => obj.sha === sha)
         let obj_index = file_list.value.indexOf(f_obj)
         console.log(file_list)
-        if(obj_index !== -1){
-          file_list.value.splice(obj_index,1)
+        if (obj_index !== -1) {
+          file_list.value.splice(obj_index, 1)
         }
         console.log(file_list)
-        open_notification("删除文件","删除成功")
+        open_notification("删除文件", "删除成功")
       })
       .catch(error => {
         console.error('Error:', error)
       });
 }
 
-const open_notification = (title,message) => {
+const open_notification = (title, message) => {
   ElNotification({
     title: title,
     message: message,
@@ -387,17 +413,21 @@ const open_notification = (title,message) => {
   })
 }
 
-const get_user_info = () =>{
+const get_user_info = () => {
   const url = 'https://api.github.com/user'
   fetch(url, {
     method: 'GET',
-    headers: {'Accept':'application/vnd.github+json','Authorization':'Bearer '+token.value,'X-GitHub-Api-Version': '2022-11-28'},
+    headers: {
+      'Accept': 'application/vnd.github+json',
+      'Authorization': 'Bearer ' + token.value,
+      'X-GitHub-Api-Version': '2022-11-28'
+    },
   }).then(response => response.json()) // 如果服务器返回的是JSON数据，则进行解析
       .then(data => {
         console.log('GET request succeeded with:', data)
-        localStorage.setItem("name",data.name)
-        localStorage.setItem("email",data.email)
-        localStorage.setItem("avatar",data.avatar_url)
+        localStorage.setItem("name", data.name)
+        localStorage.setItem("email", data.email)
+        localStorage.setItem("avatar", data.avatar_url)
         avatar_url.value = localStorage.getItem("avatar")
         name.value = localStorage.getItem("name")
         email.value = localStorage.getItem("email")
@@ -408,12 +438,12 @@ const get_user_info = () =>{
 }
 
 watch(current_page,
-  (newVal, oldVal) => {
-    if(newVal !== oldVal){
-      file_show.value = []
-      file_show.value = file_list.value.slice((newVal-1)*12,newVal*12)
+    (newVal, oldVal) => {
+      if (newVal !== oldVal) {
+        file_show.value = []
+        file_show.value = file_list.value.slice((newVal - 1) * 12, newVal * 12)
+      }
     }
-  }
 )
 </script>
 
@@ -421,10 +451,12 @@ watch(current_page,
 .flex-grow {
   flex-grow: 1;
 }
-.mg{
+
+.mg {
   margin-top: 1vh;
 }
-.glass{
+
+.glass {
   background-color: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
@@ -434,7 +466,8 @@ watch(current_page,
   border-radius: 12px;
   -webkit-border-radius: 12px;
 }
-.config{
+
+.config {
   padding: 10px;
 }
 
@@ -450,8 +483,8 @@ watch(current_page,
   }
 }
 
-.nav{
-  background: linear-gradient(0deg, rgba(192,242,255,1) 0%, rgba(190,255,217,1) 100%);
+.nav {
+  background: linear-gradient(0deg, rgba(192, 242, 255, 1) 0%, rgba(190, 255, 217, 1) 100%);
   height: 100%;
   animation: gradientBG 15s ease infinite;
   background-size: 300% 300%;
@@ -459,26 +492,38 @@ watch(current_page,
   font-weight: bold;
   padding: 5px;
 }
-.btn{
+
+.btn {
   width: 100%;
   border-radius: 10px;
-  background: linear-gradient(90deg, rgba(241,255,171,1) 0%, rgba(130,255,249,1) 50%, rgba(204,193,255,1) 100%);
+  background: linear-gradient(90deg, rgba(241, 255, 171, 1) 0%, rgba(130, 255, 249, 1) 50%, rgba(204, 193, 255, 1) 100%);
   animation: gradientBG 15s ease infinite;
   background-size: 300% 300%;
   font-weight: bolder;
 }
-.btn1{
+
+.btn1 {
   width: 100%;
   border-radius: 10px;
-  background: linear-gradient(90deg, rgba(157,135,255,1) 0%, rgba(48,255,245,1) 50%, rgba(198,255,70,1) 100%);
+  background: linear-gradient(90deg, rgba(157, 135, 255, 1) 0%, rgba(48, 255, 245, 1) 50%, rgba(198, 255, 70, 1) 100%);
   animation: gradientBG 15s ease infinite;
   background-size: 300% 300%;
   font-weight: bolder;
 }
-.copy_btn{
-  background: linear-gradient(90deg, rgba(241,255,171,1) 0%, rgba(130,255,249,1) 50%, rgba(204,193,255,1) 100%);
+
+.copy_btn {
+  background: linear-gradient(90deg, rgba(241, 255, 171, 1) 0%, rgba(130, 255, 249, 1) 50%, rgba(204, 193, 255, 1) 100%);
 }
-.copy_btn:hover{
+
+.copy_btn:hover {
   scale: 1.05;
+}
+
+.nav_github_btn {
+  height: 100%;
+  background-image: url('../../public/github.png');
+  background-size: cover;
+  border: none;
+  border-radius: 50px
 }
 </style>
