@@ -264,14 +264,12 @@ const upload = (content) => {
   const path = `${UUID}${file_suffix.value}`
   const imageUrl = 'https://api.github.com/repos/' + repo.value + '/contents/' + path
   const body_data = { branch: 'main', message: 'upload', content, path }
-  let headers = new Headers();
-  headers.append('Authorization', `token ${token.value}`);
-  headers.append('Content-Type', 'application/json; charset=utf-8');
+  console.log(headers)
   const body = JSON.stringify(body_data);
   show_progress.value = true
   fetch(imageUrl, {
     method: 'PUT',
-    headers: headers,
+    headers: {'Accept':'application/vnd.github+json','Authorization':'Bearer '+token.value,'X-GitHub-Api-Version': '2022-11-28'},
     body: body
   }).then(response => response.json()) // 如果服务器返回的是JSON数据，则进行解析
       .then(data => {
