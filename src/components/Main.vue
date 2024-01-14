@@ -152,7 +152,7 @@
       </el-row>
       <el-row class="mg">
         <el-col v-for="(item,index) in file_show" :span="4" style="padding: 10px">
-          <el-image :preview-teleported="true" style="width: 100%;height: 20vh" :src="item.url" :fit="fit"
+          <el-image :preview-teleported="true" style="width: 100%;height: 20vh;border-radius: 10px" :src="item.url" :fit="fit"
                     loading="lazy" :preview-src-list="srcList" :initial-index="index" :key="item.sha"/>
           <span style="font-size: smaller;color: gray">文件大小：{{ (item.size / 1024).toFixed(2) }}KB</span>
           <p style="color: gray;font-size: smaller;white-space: nowrap;width: 90%;overflow: hidden;text-overflow:ellipsis;">
