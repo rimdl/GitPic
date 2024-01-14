@@ -12,9 +12,7 @@
       <span style="font-size: 50px;color: rgba(189, 52, 254);font-weight: bolder">ic</span>
     </el-col>
     <el-col :span="12" style="text-align: right">
-<!--      <a href="https://github.com/rimdl/GitPic/" style="text-decoration: none;color: black;"><el-avatar :size="50" src="../../public/github2.svg" /></a>-->
-<!--      <a href="https://github.com/rimdl/GitPic/" style="text-decoration: none;color: black;"><img src="../../public/github2.svg" style="width: 30px" alt=""><br><span>github</span></a>-->
-      <a href="https://github.com/rimdl/GitPic/" target="_blank" style="text-decoration: none;color: black;"><el-button style="height: 100%;background-image: url('../../public/github2.svg');background-size: cover;border: none;border-radius: 50px" >github</el-button></a>
+      <a href="https://github.com/rimdl/GitPic/" target="_blank" style="text-decoration: none;color: black;"><el-button style="height: 100%;background-image: url('../../public/github.png');background-size: cover;border: none;border-radius: 50px" >github</el-button></a>
     </el-col>
   </el-row>
   <el-row class="mg">
