@@ -46,7 +46,7 @@
         <br>
         <el-row>
           <el-col :span="11">
-            <el-button class="btn" type="default" @click="save_config">清空</el-button>
+            <el-button class="btn" type="default" @click="clear_config">清空</el-button>
           </el-col>
           <el-col :span="11" :offset="1">
             <el-button class="btn" type="default" @click="save_config">保存</el-button>
@@ -82,7 +82,7 @@
     </el-col>
   </el-row>
 
-  <el-row class="mg" style="padding: 10px">
+  <el-row class="mg" style="padding: 10px" v-if="repo !== null && token !== null">
     <el-col :span="6">
       <el-row>
         <el-col :span="22" :offset="1" style="text-align: center;padding: 10px" class="glass">
@@ -197,6 +197,23 @@ const total_size = ref("")
 const file_show = ref([])
 
 const page_count = ref(1)
+
+const clear_config = () =>{
+  localStorage.removeItem("repo")
+  localStorage.removeItem("token")
+  localStorage.removeItem("email")
+  localStorage.removeItem("avatar")
+  localStorage.removeItem("name")
+  localStorage.removeItem("cdn")
+  repo.value = null;
+  token.value = null;
+  input_repo.value = "";
+  input_token.value = "";
+  input_cdn.value = "";
+  avatar_url.value = "";
+  name.value = "";
+  email.value = "";
+}
 const format = () => ("上传中...")
 const handleUpload = (content) => {
   console.log(content.file);
@@ -211,13 +228,18 @@ const handleUpload = (content) => {
 }
 
 const save_config = () =>{
-  localStorage.setItem("repo",input_repo.value);
-  localStorage.setItem("token",input_token.value);
-  localStorage.setItem("cdn",input_cdn.value);
-  repo.value = input_repo.value;
-  token.value = input_token.value;
-  get_user_info()
-  listFile()
+  if (input_repo.value !==null && input_token.value !== null){
+    localStorage.setItem("repo",input_repo.value);
+    localStorage.setItem("token",input_token.value);
+    localStorage.setItem("cdn",input_cdn.value);
+    repo.value = input_repo.value;
+    token.value = input_token.value;
+    get_user_info()
+    listFile()
+  }
+  else {
+    open_notification("warning","请输入仓库地址和token")
+  }
 }
 
  onBeforeMount(() => {
