@@ -296,7 +296,8 @@ const upload = (content) => {
   }).then(response => response.json()) // 如果服务器返回的是JSON数据，则进行解析
       .then(data => {
         let download_url = data.content.download_url;
-        if (input_cdn.value !== "") {
+        console.log(data)
+        if (input_cdn.value !== null) {
           d_url.value = input_cdn.value + input_repo.value + download_url.substring(download_url.indexOf("/main"));
         } else {
           d_url.value = download_url
@@ -320,10 +321,17 @@ const listFile = () => {
       .then(data => {
         let all_size = 0
         for (let i = 0; i < data.length; i++) {
-          if (input_cdn !== "") {
+          let cdn_url = ""
+          console.log(input_cdn.value)
+          if (input_cdn.value.length === 0){
+            cdn_url = "https://raw.githubusercontent.com/"
+          }
+          else {
+            cdn_url = input_cdn.value
+          }
             data[i].download_url = data[i].download_url.substring(data[i].download_url.indexOf("/main"))
             file_list.value.push({
-              "url": input_cdn.value + input_repo.value + data[i].download_url,
+              "url": cdn_url + input_repo.value + data[i].download_url,
               "size": data[i].size,
               "name": data[i].name,
               "sha": data[i].sha,
@@ -331,7 +339,6 @@ const listFile = () => {
             })
             srcList.value.push(input_cdn.value + input_repo.value + data[i].download_url)
             all_size = all_size + data[i].size
-          }
         }
         if (all_size < 1024) {
           total_size.value = all_size + "B"
