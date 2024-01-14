@@ -264,7 +264,6 @@ const upload = (content) => {
   const path = `${UUID}${file_suffix.value}`
   const imageUrl = 'https://api.github.com/repos/' + repo.value + '/contents/' + path
   const body_data = { branch: 'main', message: 'upload', content, path }
-  console.log(headers)
   const body = JSON.stringify(body_data);
   show_progress.value = true
   fetch(imageUrl, {
