@@ -127,7 +127,6 @@
     <el-col :span="18" class="glass" style="padding: 10px" v-if="file_list.length>0">
       <el-row>
         <el-col :span="24">
-          <input type="text" id="cp_url" style="display: none">
           <el-tag>
             <img src="../../public/tiger.svg" style="width: 20px" alt="">
             <label>选择图片填充方式</label>
@@ -138,6 +137,7 @@
             </el-icon>
             刷新
           </el-button>
+          <input type="text" id="cp_url" readonly>
           <br><br>
           <el-button @click="fit = 'fill'">fill</el-button>
           <el-button @click="fit = 'contain'">contain</el-button>
@@ -360,7 +360,6 @@ const copy_url = (url) => {
     obj.value = url;
     obj.select();
     open_notification("复制url", "已复制到剪贴板:" + obj.value)
-
     document.execCommand("copy");
   }
   // else {
@@ -518,5 +517,15 @@ watch(current_page,
   background-size: cover;
   border: none;
   border-radius: 50px
+}
+
+#cp_url{
+  opacity: 100;
+  border: none;
+  background: transparent;
+  color: transparent;
+}
+#cp_url:focus{
+  outline: none;
 }
 </style>
