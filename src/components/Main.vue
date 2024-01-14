@@ -189,9 +189,8 @@ import { ElNotification } from 'element-plus'
 
 const current_page = ref(1)
 const file_suffix = ref('');
-const repo = ref('') // 填你的仓库 repo
-// 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
-const token = ref('') // 填你的 Token
+const repo = ref('')
+const token = ref('')
 const d_url = ref('')
 
 const input_repo = ref('')
