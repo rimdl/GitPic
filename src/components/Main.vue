@@ -139,13 +139,15 @@
           </el-button>
           <input type="text" id="cp_url" readonly>
           <br><br>
-          <el-button @click="fit = 'fill'">fill</el-button>
-          <el-button @click="fit = 'contain'">contain</el-button>
-          <el-button @click="fit = 'cover'">cover</el-button>
-          <el-button @click="fit = 'none'">none</el-button>
-          <el-button @click="fit = 'scale-down'">scale-down</el-button>
-
-          <el-button @click="get_user_info">get</el-button>
+          <el-row class="glass" style="padding: 5px">
+            <el-col :span="24">
+              <el-button style="border-radius: 20px" type="primary" @click="fit = 'fill'">fill</el-button>
+              <el-button style="border-radius: 20px" type="primary" @click="fit = 'contain'">contain</el-button>
+              <el-button style="border-radius: 20px" type="primary" @click="fit = 'cover'">cover</el-button>
+              <el-button style="border-radius: 20px" type="primary" @click="fit = 'none'">none</el-button>
+              <el-button style="border-radius: 20px" type="primary" @click="fit = 'scale-down'">scale-down</el-button>
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
       <el-row class="mg">
