@@ -82,10 +82,11 @@
           <el-progress v-if="show_progress" :percentage="50" :indeterminate="true" :format="format"/>
           <el-input placeholder="获取失败了哦！" v-model="d_url" type="text" id="durl" v-if="d_url !== ''">
             <template #append>
-              <el-button @click="copy_url('durl')" class="copy_btn" type="primary">复制</el-button>
+              <el-button @click="copy_url(d_url)" class="copy_btn" type="primary">复制</el-button>
             </template>
           </el-input>
         </template>
+        <div style="height: 7vh"><br></div>
       </el-upload>
     </el-col>
   </el-row>
@@ -126,6 +127,7 @@
     <el-col :span="18" class="glass" style="padding: 10px" v-if="file_list.length>0">
       <el-row>
         <el-col :span="24">
+          <input type="text" id="cp_url" style="display: none">
           <el-tag>
             <img src="../../public/tiger.svg" style="width: 20px" alt="">
             <label>选择图片填充方式</label>
@@ -153,10 +155,9 @@
           <span style="font-size: smaller;color: gray">文件大小：{{ (item.size / 1024).toFixed(2) }}KB</span>
           <p style="color: gray;font-size: smaller;white-space: nowrap;width: 90%;overflow: hidden;text-overflow:ellipsis;">
             文件名：{{ item.name }}</p>
-          <input type="text" v-model="item.url" :id="index" style="display: none">
           <el-row>
             <el-col :span="12">
-              <el-button @click="copy_url(index)" class="btn" size="small">复制链接</el-button>
+              <el-button @click="copy_url(item.url)" class="btn" size="small">复制链接</el-button>
             </el-col>
             <el-col :span="11" :offset="1">
               <el-popconfirm
@@ -197,6 +198,7 @@ const file_suffix = ref('');
 const repo = ref('')
 const token = ref('')
 const d_url = ref('')
+const cp_url = ref('')
 
 const input_repo = ref('')
 const input_token = ref('')
@@ -235,14 +237,11 @@ const clear_config = () => {
 }
 const format = () => ("上传中...")
 const handleUpload = (content) => {
-  console.log(content.file);
-  console.log(content.file.name)
   file_suffix.value = content.file.name.substr(content.file.name.lastIndexOf("."));
   const reader = new FileReader();
   reader.readAsDataURL(content.file);    // 解析成base64格式
   reader.onload = function () {
     upload(this.result);
-    // console.log(this.result)
   }
 }
 
@@ -294,7 +293,6 @@ const upload = (content) => {
     body: body
   }).then(response => response.json()) // 如果服务器返回的是JSON数据，则进行解析
       .then(data => {
-        console.log('PUT request succeeded with:', data)
         let download_url = data.content.download_url;
         if (input_cdn.value !== "") {
           d_url.value = input_cdn.value + input_repo.value + download_url.substring(download_url.indexOf("/main"));
@@ -305,7 +303,7 @@ const upload = (content) => {
         open_notification("上传图片", "上传成功！")
       })
       .catch(error => {
-        console.error('Error:', error)
+        console.error(error)
         show_progress.value = false
       });
 }
@@ -318,7 +316,6 @@ const listFile = () => {
     headers: {'X-GitHub-Api-Version': '2022-11-28'},
   }).then(response => response.json()) // 如果服务器返回的是JSON数据，则进行解析
       .then(data => {
-        console.log('Get request succeeded with:', data)
         let all_size = 0
         for (let i = 0; i < data.length; i++) {
           if (input_cdn !== "") {
@@ -343,7 +340,6 @@ const listFile = () => {
         } else {
           total_size.value = (all_size / (1024 * 1024 * 1024)).toFixed(2) + "GB"
         }
-        console.log("size:" + total_size.value)
         if (file_list.value.length <= 12) {
           file_show.value = file_list.value
           page_count.value = 1
@@ -357,29 +353,30 @@ const listFile = () => {
       });
 }
 
-const copy_url = (index) => {
-  if (index !== "durl") {
-    let obj = document.getElementById(index);
+const copy_url = (url) => {
+  if (url !== null) {
+    // cp_url.value = url
+    let obj = document.getElementById("cp_url");
+    obj.value = url;
     obj.select();
     open_notification("复制url", "已复制到剪贴板:" + obj.value)
 
     document.execCommand("copy");
-  } else {
-    if (d_url.value === "") {
-      open_notification("复制url", "请先上传文件")
-      return
-    }
-    open_notification("复制url", "已复制到剪贴板:" + d_url.value)
-    document.getElementById("durl").select();
-    document.execCommand("copy");
   }
+  // else {
+  //   if (d_url.value === "") {
+  //     open_notification("复制url", "请先上传文件")
+  //     return
+  //   }
+  //   open_notification("复制url", "已复制到剪贴板:" + d_url.value)
+  //   document.getElementById("durl").select();
+  //   document.execCommand("copy");
+  // }
 }
 
 const delete_file = (sha, filename) => {
-  console.log(sha)
   const url = 'https://api.github.com/repos/' + repo.value + '/contents/' + filename
   let body = {message: "delete file", committer: {name: name.value, email: email.value}, sha: sha}
-  console.log(body)
   fetch(url, {
     method: 'DELETE',
     body: JSON.stringify(body),
@@ -390,14 +387,11 @@ const delete_file = (sha, filename) => {
     },
   }).then(response => response.json()) // 如果服务器返回的是JSON数据，则进行解析
       .then(data => {
-        console.log('Delete request succeeded with:', data)
         let f_obj = file_list.value.find(obj => obj.sha === sha)
         let obj_index = file_list.value.indexOf(f_obj)
-        console.log(file_list)
         if (obj_index !== -1) {
           file_list.value.splice(obj_index, 1)
         }
-        console.log(file_list)
         open_notification("删除文件", "删除成功")
       })
       .catch(error => {
@@ -424,7 +418,6 @@ const get_user_info = () => {
     },
   }).then(response => response.json()) // 如果服务器返回的是JSON数据，则进行解析
       .then(data => {
-        console.log('GET request succeeded with:', data)
         localStorage.setItem("name", data.name)
         localStorage.setItem("email", data.email)
         localStorage.setItem("avatar", data.avatar_url)
