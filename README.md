@@ -15,3 +15,4 @@
     2. 再打开此[链接](https://github.com/settings/profile)，设置`Public email`，选择你的邮箱。
 
 ## 结束
+- 如果你觉得这个项目对你有帮助，请点个star吧。
