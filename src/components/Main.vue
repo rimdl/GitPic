@@ -39,11 +39,12 @@
         <label style="margin-left: 1vw">Token </label>
         <br><span style="font-size: smaller;color: orangered">(请妥善保管，丢失后无法恢复。)</span>
         <br>
-        <el-input v-model="input_token" placeholder="请从你的github设置中获取" style="width: 100%;"/>
+        <el-input v-model="input_token" type="password" placeholder="请从你的github设置中获取" style="width: 100%;"/>
         <br>
         <br>
         <img src="../../public/cdn.svg" alt="" style="width: 20px">
         <label style="margin-left: 1vw">cdn</label>
+        <br><span style="font-size: smaller;color: orangered">(不填，则默认使用：https://raw.githubusercontent.com/)</span>
         <br>
         <el-input v-model="input_cdn" placeholder="用于加速的CDN" style="width: 100%;"/>
         <br>
@@ -59,7 +60,7 @@
         </el-row>
       </div>
     </el-col>
-    <el-col :span="17" :offset="1">
+    <el-col :span="17" :offset="1" v-if="name">
       <el-upload
           class="glass"
           drag
@@ -204,7 +205,7 @@ const cp_url = ref('')
 
 const input_repo = ref('')
 const input_token = ref('')
-const input_cdn = ref('')
+const input_cdn = ref('https://raw.githubusercontent.com/')
 
 const show_progress = ref(false)
 
@@ -264,13 +265,17 @@ const save_config = () => {
 onBeforeMount(() => {
   input_repo.value = localStorage.getItem("repo");
   input_token.value = localStorage.getItem("token");
-  input_cdn.value = localStorage.getItem("cdn");
+  if (localStorage.getItem("cdn")!== null){
+    input_cdn.value = localStorage.getItem("cdn");
+  }
   repo.value = input_repo.value;
   token.value = input_token.value;
   avatar_url.value = localStorage.getItem("avatar")
   name.value = localStorage.getItem("name")
   email.value = localStorage.getItem("email")
-  listFile()
+  if (repo.value!==null && token.value !== null){
+    listFile()
+  }
 })
 
 onBeforeUpdate(() => {
@@ -323,7 +328,7 @@ const listFile = () => {
         for (let i = 0; i < data.length; i++) {
           let cdn_url = ""
           console.log(input_cdn.value)
-          if (input_cdn.value.length === 0){
+          if (input_cdn.value === ""){
             cdn_url = "https://raw.githubusercontent.com/"
           }
           else {
