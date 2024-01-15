@@ -68,6 +68,7 @@
           :show-file-list="false"
           :http-request="handleUpload"
           accept="image/*"
+          :disabled="disabled_upload"
       >
         <el-icon class="el-icon--upload">
           <upload-filled/>
@@ -75,13 +76,19 @@
         <div class="el-upload__text">
           拖动文件到此处 或者 <em>点击上传</em> 或者 <br><br>
           <el-button @click.stop="readClipboard" round size="large">粘贴剪贴板内容</el-button>
+          <br>
+          <el-row class="mg">
+            <el-col :span="8" :offset="8">
+              <el-progress v-if="show_progress" :percentage="50" :indeterminate="true" :format="format"/>
+            </el-col>
+          </el-row>
+
         </div>
         <template #tip>
           <div class="el-upload__tip">
             注意：上传的文件不宜过大，上传成功的图片不能立刻就在下方看到，请等待10s以上的时间后点击刷新按钮。
             <br>
           </div>
-          <el-progress v-if="show_progress" :percentage="50" :indeterminate="true" :format="format"/>
           <el-input placeholder="获取失败了哦！" v-model="d_url" type="text" id="durl" v-if="d_url !== ''">
             <template #append>
               <el-button @click="copy_url(d_url)" class="copy_btn" type="primary">复制</el-button>
@@ -202,26 +209,20 @@ const file_suffix = ref('');
 const repo = ref('')
 const token = ref('')
 const d_url = ref('')
-const cp_url = ref('')
-
 const input_repo = ref('')
 const input_token = ref('')
 const input_cdn = ref('')
-
 const show_progress = ref(false)
-
 const file_list = ref([])
 const srcList = ref([])
 const fit = ref('cover')
-
 const avatar_url = ref('')
 const name = ref('')
 const email = ref('')
 const total_size = ref("")
-
 const file_show = ref([])
-
 const page_count = ref(1)
+const disabled_upload = ref(false)
 
 async function readClipboard() {
   try {
@@ -329,6 +330,7 @@ const upload = (content) => {
   const body_data = {branch: 'main', message: 'upload', content, path}
   const body = JSON.stringify(body_data);
   show_progress.value = true
+  disabled_upload.value = true
   fetch(imageUrl, {
     method: 'PUT',
     headers: {
@@ -340,7 +342,6 @@ const upload = (content) => {
   }).then(response => response.json()) // 如果服务器返回的是JSON数据，则进行解析
       .then(data => {
         let download_url = data.content.download_url;
-        console.log(data)
         if (input_cdn.value !== null) {
           d_url.value = input_cdn.value + input_repo.value + download_url.substring(download_url.indexOf("/main"));
         } else {
@@ -348,10 +349,12 @@ const upload = (content) => {
         }
         show_progress.value = false
         open_notification("上传图片", "上传成功！")
+        disabled_upload.value = false
       })
       .catch(error => {
         console.error(error)
         show_progress.value = false
+        disabled_upload.value = false
       });
 }
 
