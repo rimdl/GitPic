@@ -73,7 +73,8 @@
           <upload-filled/>
         </el-icon>
         <div class="el-upload__text">
-          拖动文件到此处 或者 <em>点击上传</em>
+          拖动文件到此处 或者 <em>点击上传</em> 或者 <br><br>
+          <el-button @click.stop="readClipboard" round size="large">粘贴剪贴板内容</el-button>
         </div>
         <template #tip>
           <div class="el-upload__tip">
@@ -221,6 +222,44 @@ const total_size = ref("")
 const file_show = ref([])
 
 const page_count = ref(1)
+
+async function readClipboard() {
+  try {
+    const clipboardItems = await navigator.clipboard.read();
+    // 遍历查找图像类型的数据项
+    for (const item of clipboardItems) {
+      for (const type of item.types) {
+        console.log(type)
+        if (type.startsWith('image/')) {
+          open_notification("提示","成功读取剪贴板中的图片")
+          const blob = await item.getType(type);
+          blobToBase64(blob).then(b64 => {
+            file_suffix.value = ".png"
+            upload(b64);
+          })
+          break;
+        }
+        else {
+          open_notification("提示","剪贴板中的内容不是图片")
+          break
+        }
+      }
+    }
+  } catch (error) {
+    console.error('无法读取剪贴板内容', error);
+  }
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob); // 使用 readAsDataURL 方法读取 Blob 数据，并将其编码为 Data URL 格式，其中包含 Base64 编码的数据
+  });
+}
 
 const clear_config = () => {
   localStorage.removeItem("repo")
@@ -376,15 +415,6 @@ const copy_url = (url) => {
     open_notification("复制url", "已复制到剪贴板:" + obj.value)
     document.execCommand("copy");
   }
-  // else {
-  //   if (d_url.value === "") {
-  //     open_notification("复制url", "请先上传文件")
-  //     return
-  //   }
-  //   open_notification("复制url", "已复制到剪贴板:" + d_url.value)
-  //   document.getElementById("durl").select();
-  //   document.execCommand("copy");
-  // }
 }
 
 const delete_file = (sha, filename) => {
