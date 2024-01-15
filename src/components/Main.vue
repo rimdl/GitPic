@@ -32,14 +32,14 @@
         <img src="../../public/github.svg" alt="" style="width: 20px">
         <label style="margin-left: 1vw">仓库</label>
         <br>
-        <el-input v-model="input_repo" placeholder="例如：user/example" style="width: 100%;"/>
+        <el-input v-model="input_repo" name="username" placeholder="例如：user/example" style="width: 100%;"/>
         <br>
         <br>
         <img src="../../public/key.svg" alt="" style="width: 20px">
         <label style="margin-left: 1vw">Token </label>
         <br><span style="font-size: smaller;color: orangered">(请妥善保管，丢失后无法恢复。)</span>
         <br>
-        <el-input v-model="input_token" type="password" placeholder="请从你的github设置中获取" style="width: 100%;"/>
+        <el-input v-model="input_token" name="password" type="password" placeholder="请从你的github设置中获取" style="width: 100%;"/>
         <br>
         <br>
         <img src="../../public/cdn.svg" alt="" style="width: 20px">
@@ -205,7 +205,7 @@ const cp_url = ref('')
 
 const input_repo = ref('')
 const input_token = ref('')
-const input_cdn = ref('https://raw.githubusercontent.com/')
+const input_cdn = ref('')
 
 const show_progress = ref(false)
 
