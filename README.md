@@ -13,3 +13,5 @@
 - 本项目中部分功能需要获取你的`email`信息，如果你的`email`信息未公开的话，请按以下步骤进行配置。
     1. 打开此[链接](https://github.com/settings/emails)，取消勾选`Keep my email addresses private`;
     2. 再打开此[链接](https://github.com/settings/profile)，设置`Public email`，选择你的邮箱。
+
+## 结束
