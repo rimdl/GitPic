@@ -248,16 +248,12 @@ const url_format = ref('')
 
 const cp_input = ref(null)
 
-onMounted(() => {
-  console.log(cp_input.value)
-})
 async function readClipboard() {
   try {
     const clipboardItems = await navigator.clipboard.read();
     // 遍历查找图像类型的数据项
     for (const item of clipboardItems) {
       for (const type of item.types) {
-        console.log(type)
         if (type.startsWith('image/')) {
           open_notification("提示","成功读取剪贴板中的图片")
           const blob = await item.getType(type);
@@ -402,7 +398,6 @@ const listFile = () => {
         let all_size = 0
         for (let i = 0; i < data.length; i++) {
           let cdn_url = ""
-          console.log(input_cdn.value)
           if (input_cdn.value === ""){
             cdn_url = "https://raw.githubusercontent.com/"
           }
