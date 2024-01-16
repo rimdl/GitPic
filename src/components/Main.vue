@@ -28,179 +28,200 @@
     </el-col>
 
     <el-col :span="5" :offset="1">
-      <div class="glass config">
-        <img src="../../public/github.svg" alt="" style="width: 20px">
-        <label style="margin-left: 1vw">仓库</label>
-        <br>
-        <el-input v-model="input_repo" name="username" placeholder="例如：user/example" style="width: 100%;"/>
-        <br>
-        <br>
-        <img src="../../public/key.svg" alt="" style="width: 20px">
-        <label style="margin-left: 1vw">Token </label>
-        <br><span style="font-size: smaller;color: orangered">(请妥善保管，丢失后无法恢复。)</span>
-        <br>
-        <el-input v-model="input_token" name="password" type="password" placeholder="请从你的github设置中获取" style="width: 100%;"/>
-        <br>
-        <br>
-        <img src="../../public/cdn.svg" alt="" style="width: 20px">
-        <label style="margin-left: 1vw">cdn</label>
-        <br><span style="font-size: smaller;color: orangered">(不填，则默认使用：https://raw.githubusercontent.com/)</span>
-        <br>
-        <el-input v-model="input_cdn" placeholder="用于加速的CDN" style="width: 100%;"/>
-        <br>
-        <br>
-        <el-row>
-          <el-col :span="11">
-            <el-button class="btn" type="default" @click="clear_config">清空</el-button>
-          </el-col>
-          <el-col :span="11" :offset="1">
-            <el-button class="btn" type="default" @click="save_config">保存</el-button>
-          </el-col>
-
-        </el-row>
-      </div>
-    </el-col>
-    <el-col :span="17" :offset="1" v-if="name">
-      <el-upload
-          class="glass"
-          drag
-          list-type="picture"
-          :show-file-list="false"
-          :http-request="handleUpload"
-          accept="image/*"
-          :disabled="disabled_upload"
-      >
-        <el-icon class="el-icon--upload">
-          <upload-filled/>
-        </el-icon>
-        <div class="el-upload__text">
-          拖动文件到此处 或者 <em>点击上传</em> 或者 <br><br>
-          <el-button @click.stop="readClipboard" round size="large">粘贴剪贴板内容</el-button>
-          <br>
-          <el-row class="mg">
-            <el-col :span="8" :offset="8">
-              <el-progress v-if="show_progress" :percentage="50" :indeterminate="true" :format="format"/>
-            </el-col>
-          </el-row>
-
-        </div>
-        <template #tip>
-          <div class="el-upload__tip">
-            注意：上传的文件不宜过大，上传成功的图片不能立刻就在下方看到，请等待10s以上的时间后点击刷新按钮。
-            <br>
-          </div>
-          <el-input placeholder="获取失败了哦！" v-model="d_url" type="text" id="durl" v-if="d_url !== ''">
-            <template #append>
-              <el-button @click="copy_url(d_url)" class="copy_btn" type="primary">复制</el-button>
-            </template>
-          </el-input>
-        </template>
-        <div style="height: 7vh"><br></div>
-      </el-upload>
-    </el-col>
-  </el-row>
-
-  <el-row class="mg" style="padding: 10px" v-if="repo !== null && token !== null">
-    <el-col :span="6">
-      <el-row>
-        <el-col :span="22" :offset="1" style="text-align: center;padding: 10px" class="glass">
-          <a :href="'https://github.com/'+repo" target="_blank">
-            <el-avatar :size="50" :src="avatar_url"/>
-          </a>
-          <br>
-          <span style="font-size: smaller;color: gray">{{ name }}</span>
-          <br>
-          <span style="font-size: smaller;color: gray">{{ email }}</span>
-          <br>
-          <div v-if="total_size !== ''">
-            <span style="font-size: small;font-weight:bold;color: gray">当前仓库占用空间：<el-tag effect="dark"
-                                                                                                 round>{{ total_size }}</el-tag></span>
-            <br>
-            <span style="font-size: small;font-weight:bold;color: gray">当前仓库文件数：<el-tag effect="dark"
-                                                                                               round>{{ file_list.length }}</el-tag></span>
-            <br>
-            <br>
-          </div>
-
-          <el-row>
-            <el-col :span="24">
-              <el-button @click="listFile" size="small" class="btn1">获取当前仓库文件</el-button>
-            </el-col>
-            <el-col :span="24">
-              <el-button @click="get_user_info" size="small" class="btn1">重新获取用户信息</el-button>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-    </el-col>
-    <el-col :span="18" class="glass" style="padding: 10px" v-if="file_list.length>0">
-      <el-row>
+      <el-row class="glass config">
         <el-col :span="24">
-          <el-tag>
-            <img src="../../public/tiger.svg" style="width: 20px" alt="">
-            <label>选择图片填充方式</label>
-          </el-tag>
-          <el-button class="copy_btn" @click="listFile" size="small" style="margin-left: 1vw;border-radius: 20px">
-            <el-icon class="is-loading">
-              <Loading/>
-            </el-icon>
-            刷新
-          </el-button>
-          <input type="text" id="cp_url" readonly>
-          <br><br>
-          <el-row class="glass" style="padding: 5px">
-            <el-col :span="24">
-              <el-button style="border-radius: 20px" type="primary" @click="fit = 'fill'">fill</el-button>
-              <el-button style="border-radius: 20px" type="primary" @click="fit = 'contain'">contain</el-button>
-              <el-button style="border-radius: 20px" type="primary" @click="fit = 'cover'">cover</el-button>
-              <el-button style="border-radius: 20px" type="primary" @click="fit = 'none'">none</el-button>
-              <el-button style="border-radius: 20px" type="primary" @click="fit = 'scale-down'">scale-down</el-button>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-      <el-row class="mg">
-        <el-col v-for="(item,index) in file_show" :span="4" style="padding: 10px" :key="item.sha">
-          <el-image :preview-teleported="true" style="width: 100%;height: 20vh;border-radius: 10px" :src="item.url" :fit="fit"
-                    loading="lazy" :preview-src-list="srcList" :initial-index="index"/>
-          <span style="font-size: smaller;color: gray">文件大小：{{ (item.size / 1024).toFixed(2) }}KB</span>
-          <p style="color: gray;font-size: smaller;white-space: nowrap;width: 90%;overflow: hidden;text-overflow:ellipsis;">
-            文件名：{{ item.name }}</p>
+          <img src="../../public/github.svg" alt="" style="width: 20px">
+          <label style="margin-left: 1vw">仓库</label>
+          <br>
+          <el-input v-model="input_repo" name="username" placeholder="例如：user/example" style="width: 100%;"/>
+          <br>
+          <br>
+          <img src="../../public/key.svg" alt="" style="width: 20px">
+          <label style="margin-left: 1vw">Token </label>
+          <br><span style="font-size: smaller;color: orangered">(请妥善保管，丢失后无法恢复。)</span>
+          <br>
+          <el-input v-model="input_token" name="password" type="password" placeholder="请从你的github设置中获取" style="width: 100%;"/>
+          <br>
+          <br>
+          <img src="../../public/cdn.svg" alt="" style="width: 20px">
+          <label style="margin-left: 1vw">cdn</label>
+          <br><span style="font-size: smaller;color: orangered">(不填，则默认使用：https://raw.githubusercontent.com/)</span>
+          <br>
+          <el-input v-model="input_cdn" placeholder="用于加速的CDN" style="width: 100%;"/>
+          <br>
+          <br>
           <el-row>
-            <el-col :span="12">
-              <el-button @click="copy_url(item.url)" class="btn" size="small">复制链接</el-button>
+            <el-col :span="11">
+              <el-button class="btn" type="default" @click="clear_config">清空</el-button>
             </el-col>
             <el-col :span="11" :offset="1">
-              <el-popconfirm
-                  width="120"
-                  confirm-button-text="确认"
-                  cancel-button-text="取消"
-                  icon-color="#626AEF"
-                  title="确定删除?"
-                  @confirm="delete_file(item.sha,item.filename)"
+              <el-button class="btn" type="default" @click="save_config">保存</el-button>
+            </el-col>
+          </el-row>
+          <el-row class="mg" style="border-top: 1px gray solid;">
+            <el-col :span="24" class="mg">
+              <img src="../../public/select.svg" alt="" style="width: 20px">
+              <label style="margin-left: 1vw">选择链接格式</label><br>
+              <el-select
+                  v-model="url_format"
+                  class="m-2"
+                  placeholder="Select"
+                  size="small"
+                  style="width: 240px"
               >
-                <template #reference>
-                  <el-button type="default" size="small" style="border-radius: 10px"><img src="../../public/delete.svg"
-                                                                                          style="width: 15px" alt="">
-                  </el-button>
-                </template>
-              </el-popconfirm>
+                <el-option label="Markdown" value="md" />
+                <el-option label="href" value="href" />
+                <el-option label="url" value="url" />
+              </el-select>
             </el-col>
           </el-row>
         </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="24" style="text-align: center">
-          <el-pagination background page-size="12" :hide-on-single-page="true" v-model:current-page="current_page"
-                         default-page-size="12" layout="prev, pager, next" :page-count="page_count"/>
+      <el-row class="mg" v-if="repo !== null && token !== null">
+            <el-col :span="24" style="text-align: center;padding: 10px" class="glass">
+              <a :href="'https://github.com/'+repo" target="_blank">
+                <el-avatar :size="50" :src="avatar_url"/>
+              </a>
+              <br>
+              <span style="font-size: smaller;color: gray">{{ name }}</span>
+              <br>
+              <span style="font-size: smaller;color: gray">{{ email }}</span>
+              <br>
+              <div v-if="total_size !== ''">
+            <span style="font-size: small;font-weight:bold;color: gray">当前仓库占用空间：<el-tag effect="dark"
+                                                                                                 round>{{ total_size }}</el-tag></span>
+                <br>
+                <span style="font-size: small;font-weight:bold;color: gray">当前仓库文件数：<el-tag effect="dark"
+                                                                                                   round>{{ file_list.length }}</el-tag></span>
+                <br>
+                <br>
+              </div>
+
+              <el-row>
+                <el-col :span="24">
+                  <el-button @click="listFile" size="small" class="btn1">获取当前仓库文件</el-button>
+                </el-col>
+                <el-col :span="24">
+                  <el-button @click="get_user_info" size="small" class="btn1">重新获取用户信息</el-button>
+                </el-col>
+              </el-row>
+            </el-col>
+      </el-row>
+    </el-col>
+    <el-col :span="16" :offset="1">
+      <el-row v-if="name">
+        <el-col :span="24" v-if="name">
+          <el-upload
+              class="glass"
+              drag
+              list-type="picture"
+              :show-file-list="false"
+              :http-request="handleUpload"
+              accept="image/*"
+              :disabled="disabled_upload"
+          >
+            <el-icon class="el-icon--upload">
+              <upload-filled/>
+            </el-icon>
+            <div class="el-upload__text">
+              拖动文件到此处 或者 <em>点击上传</em> 或者 <br><br>
+              <el-button @click.stop="readClipboard" round size="large">粘贴剪贴板内容</el-button>
+              <br>
+              <el-row class="mg">
+                <el-col :span="8" :offset="8">
+                  <el-progress v-if="show_progress" :percentage="50" :indeterminate="true" :format="format"/>
+                </el-col>
+              </el-row>
+
+            </div>
+            <template #tip>
+              <div class="el-upload__tip">
+                注意：上传的文件不宜过大，上传成功的图片不能立刻就在下方看到，请等待30s以上的时间后点击刷新按钮。
+                <br>
+              </div>
+              <el-input placeholder="获取失败了哦！" v-model="d_url" type="text" id="durl" v-if="d_url !== ''">
+                <template #append>
+                  <el-button @click="copy_url(d_url)" class="copy_btn" type="primary">复制</el-button>
+                </template>
+              </el-input>
+              <br>
+              <br>
+            </template>
+            <div style="height: 7vh"><br></div>
+          </el-upload>
+        </el-col>
+        <el-col :span="24" class="glass mg" style="padding: 10px" v-if="file_list.length>0">
+          <el-row>
+            <el-col :span="24">
+              <el-tag>
+                <img src="../../public/tiger.svg" style="width: 20px" alt="">
+                <label>选择图片填充方式</label>
+              </el-tag>
+              <el-button class="copy_btn" @click="listFile" size="small" style="margin-left: 1vw;border-radius: 20px">
+                <el-icon class="is-loading">
+                  <Loading/>
+                </el-icon>
+                刷新
+              </el-button>
+              <input type="text" ref="cp_input" id="cp_url" readonly>
+              <br><br>
+              <el-row class="glass" style="padding: 5px">
+                <el-col :span="24">
+                  <el-button style="border-radius: 20px" type="primary" @click="fit = 'fill'">fill</el-button>
+                  <el-button style="border-radius: 20px" type="primary" @click="fit = 'contain'">contain</el-button>
+                  <el-button style="border-radius: 20px" type="primary" @click="fit = 'cover'">cover</el-button>
+                  <el-button style="border-radius: 20px" type="primary" @click="fit = 'none'">none</el-button>
+                  <el-button style="border-radius: 20px" type="primary" @click="fit = 'scale-down'">scale-down</el-button>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="mg">
+            <el-col v-for="(item,index) in file_show" :span="4" style="padding: 10px" :key="item.name">
+              <el-image :preview-teleported="true" style="width: 100%;height: 20vh;border-radius: 10px" :src="item.url" :fit="fit"
+                        loading="lazy" :preview-src-list="srcList" :initial-index="index"/>
+              <span style="font-size: smaller;color: gray">文件大小：{{ (item.size / 1024).toFixed(2) }}KB</span>
+              <p style="color: gray;font-size: smaller;white-space: nowrap;width: 90%;overflow: hidden;text-overflow:ellipsis;">
+                文件名：{{ item.name }}</p>
+              <el-row>
+                <el-col :span="12">
+                  <el-button @click="copy_url(item.url)" class="btn" size="small">复制链接</el-button>
+                </el-col>
+                <el-col :span="11" :offset="1">
+                  <el-popconfirm
+                      width="120"
+                      confirm-button-text="确认"
+                      cancel-button-text="取消"
+                      icon-color="#626AEF"
+                      title="确定删除?"
+                      @confirm="delete_file(item.sha,item.filename)"
+                  >
+                    <template #reference>
+                      <el-button type="default" size="small" style="border-radius: 10px"><img src="../../public/delete.svg"
+                                                                                              style="width: 15px" alt="">
+                      </el-button>
+                    </template>
+                  </el-popconfirm>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24" style="text-align: center">
+              <el-pagination background :page-size="12" :hide-on-single-page="true" v-model:current-page="current_page"
+                             :default-page-size="12" layout="prev, pager, next" :page-count="page_count"/>
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
     </el-col>
   </el-row>
+
+
 </template>
 
 <script setup>
-import {onBeforeMount, onBeforeUpdate, ref, watch} from 'vue';
+import {onBeforeMount, onMounted, onBeforeUpdate, ref, watch, reactive, toRefs} from 'vue';
 import {UploadFilled} from '@element-plus/icons-vue'
 import {ElNotification} from 'element-plus'
 
@@ -223,7 +244,13 @@ const total_size = ref("")
 const file_show = ref([])
 const page_count = ref(1)
 const disabled_upload = ref(false)
+const url_format = ref('')
 
+const cp_input = ref(null)
+
+onMounted(() => {
+  console.log(cp_input.value)
+})
 async function readClipboard() {
   try {
     const clipboardItems = await navigator.clipboard.read();
@@ -277,6 +304,8 @@ const clear_config = () => {
   avatar_url.value = "";
   name.value = "";
   email.value = "";
+  url_format.value = "";
+  localStorage.removeItem("url_format")
 }
 const format = () => ("上传中...")
 const handleUpload = (content) => {
@@ -302,11 +331,15 @@ const save_config = () => {
   }
 }
 
+
 onBeforeMount(() => {
   input_repo.value = localStorage.getItem("repo");
   input_token.value = localStorage.getItem("token");
   if (localStorage.getItem("cdn")!== null){
     input_cdn.value = localStorage.getItem("cdn");
+  }
+  if (localStorage.getItem("url_format")!== null){
+    url_format.value = localStorage.getItem("url_format");
   }
   repo.value = input_repo.value;
   token.value = input_token.value;
@@ -411,8 +444,14 @@ const listFile = () => {
 
 const copy_url = (url) => {
   if (url !== null) {
-    // cp_url.value = url
-    let obj = document.getElementById("cp_url");
+    // let obj = document.getElementById("cp_url");
+    if (url_format.value === "md"){
+      url = "!["+ url.substring(url.indexOf("/main/")+6)+"](" + url + ")"
+    }
+    else if (url_format.value === "href") {
+      url = "<a href=\"" + url + "\">" + url.substring(url.indexOf("/main/") + 6) + "</a>"
+    }
+    let obj = cp_input.value;
     obj.value = url;
     obj.select();
     open_notification("复制url", "已复制到剪贴板:" + obj.value)
@@ -476,11 +515,19 @@ const get_user_info = () => {
       });
 }
 
-watch(current_page,
-    (newVal, oldVal) => {
+watch(() => [current_page.value, url_format.value],
+    ([newVal, newVal2],[oldVal, oldVal2]) => {
       if (newVal !== oldVal) {
         file_show.value = []
         file_show.value = file_list.value.slice((newVal - 1) * 12, newVal * 12)
+      }
+      if(newVal2 !== oldVal2){
+        if (newVal2 === "" || newVal2 === null ){
+          localStorage.removeItem("url_format")
+        }
+        else {
+          localStorage.setItem("url_format", newVal2)
+        }
       }
     }
 )
