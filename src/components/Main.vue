@@ -437,9 +437,8 @@ const listFile = () => {
       });
 }
 
-let audio = new Audio('../../public/audio/audio1.wav');
 const copy_url = (url) => {
-  audio.pause()
+  let audio = new Audio('../../public/audio/audio1.wav');
   if (url !== null) {
     // let obj = document.getElementById("cp_url");
     if (url_format.value === "md"){
