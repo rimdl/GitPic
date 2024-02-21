@@ -187,7 +187,7 @@
             <el-col v-for="(item,index) in file_show" :span="4" style="padding: 10px" :key="item.name">
               <el-image :preview-teleported="true" style="width: 100%;height: 20vh;border-radius: 10px" :src="item.url"
                         :fit="fit"
-                        loading="lazy" :preview-src-list="srcList" :initial-index="index"/>
+                        loading="lazy" :preview-src-list="srcList" :initial-index="(current_page-1)*12+index"/>
               <span style="font-size: smaller;color: gray">文件大小：{{ (item.size / 1024).toFixed(2) }}KB</span>
               <p style="color: gray;font-size: smaller;white-space: nowrap;width: 90%;overflow: hidden;text-overflow:ellipsis;">
                 文件名：{{ item.name }}</p>
