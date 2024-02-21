@@ -1,21 +1,19 @@
 <template>
   <el-row class="nav">
     <el-col :span="12">
-      <img
-          style="width: 50px;border-radius: 10px"
-          src="../../public/logo.jpg"
-          alt="GitPic"
-      />
-      <span style="font-size: 50px;color: rgba(255, 220, 52);font-weight: bolder">G</span>
-      <span style="font-size: 50px;color: rgba(72, 201, 255);font-weight: bolder">it</span>
-      <span style="font-size: 50px;color: rgba(141, 114, 255);font-weight: bolder">P</span>
-      <span style="font-size: 50px;color: rgba(189, 52, 254);font-weight: bolder">ic</span>
-    </el-col>
-    <el-col :span="12" style="text-align: right">
-      <a href="https://github.com/rimdl/GitPic/" target="_blank" style="text-decoration: none;color: black;">
-        <el-button class="nav_github_btn">github</el-button>
+      <a href="https://github.com/rimdl/gitpic" target="_blank" style="text-decoration: none" title="查看此项目源代码">
+        <img
+            style="width: 50px;border-radius: 10px"
+            src="../../public/logo.jpg"
+            alt="GitPic"
+        />
+        <span style="font-size: 50px;color: rgba(255, 220, 52);font-weight: bolder">G</span>
+        <span style="font-size: 50px;color: rgba(72, 201, 255);font-weight: bolder">it</span>
+        <span style="font-size: 50px;color: rgba(141, 114, 255);font-weight: bolder">P</span>
+        <span style="font-size: 50px;color: rgba(189, 52, 254);font-weight: bolder">ic</span>
       </a>
     </el-col>
+
   </el-row>
   <el-row class="mg">
     <el-col :span="24">
@@ -40,12 +38,14 @@
           <label style="margin-left: 1vw">Token </label>
           <br><span style="font-size: smaller;color: orangered">(请妥善保管，丢失后无法恢复。)</span>
           <br>
-          <el-input v-model="input_token" name="password" type="password" placeholder="请从你的github设置中获取" style="width: 100%;"/>
+          <el-input v-model="input_token" name="password" type="password" placeholder="请从你的github设置中获取"
+                    style="width: 100%;"/>
           <br>
           <br>
           <img src="../../public/cdn.svg" alt="" style="width: 20px">
           <label style="margin-left: 1vw">cdn</label>
-          <br><span style="font-size: smaller;color: orangered">(不填，则默认使用：https://raw.githubusercontent.com/)</span>
+          <br><span
+            style="font-size: smaller;color: orangered">(不填，则默认使用：https://raw.githubusercontent.com/)</span>
           <br>
           <el-input v-model="input_cdn" placeholder="用于加速的CDN" style="width: 100%;"/>
           <br>
@@ -55,7 +55,7 @@
               <el-button class="btn" type="default" @click="clear_config">清空</el-button>
             </el-col>
             <el-col :span="11" :offset="1">
-              <el-button class="btn" type="default" @click="save_config">保存</el-button>
+              <el-button class="btn_1" type="default" @click="save_config">保存</el-button>
             </el-col>
           </el-row>
           <el-row class="mg" style="border-top: 1px gray solid;">
@@ -65,47 +65,51 @@
               <el-select
                   v-model="url_format"
                   class="m-2"
-                  placeholder="Select"
+                  placeholder="下拉选择"
                   size="small"
                   style="width: 240px"
               >
-                <el-option label="Markdown" value="md" />
-                <el-option label="href" value="href" />
-                <el-option label="url" value="url" />
+                <el-option label="Markdown" value="md"/>
+                <el-option label="href" value="href"/>
+                <el-option label="url" value="url"/>
               </el-select>
             </el-col>
           </el-row>
         </el-col>
       </el-row>
       <el-row class="mg" v-if="repo !== null && token !== null">
-            <el-col :span="24" style="text-align: center;padding: 10px" class="glass">
-              <a :href="'https://github.com/'+repo" target="_blank">
-                <el-avatar :size="50" :src="avatar_url"/>
-              </a>
-              <br>
-              <span style="font-size: smaller;color: gray">{{ name }}</span>
-              <br>
-              <span style="font-size: smaller;color: gray">{{ email }}</span>
-              <br>
-              <div v-if="total_size !== ''">
+        <el-col :span="24" style="text-align: center;padding: 10px" class="glass">
+          <a :href="'https://github.com/'+repo" target="_blank">
+            <el-avatar :size="50" :src="avatar_url"/>
+          </a>
+          <br>
+          <span style="font-size: smaller;color: gray">{{ name }}</span>
+          <br>
+          <span style="font-size: smaller;color: gray">{{ email }}</span>
+          <br>
+          <div v-if="total_size !== ''">
             <span style="font-size: small;font-weight:bold;color: gray">当前仓库占用空间：<el-tag effect="dark"
-                                                                                                 round>{{ total_size }}</el-tag></span>
-                <br>
-                <span style="font-size: small;font-weight:bold;color: gray">当前仓库文件数：<el-tag effect="dark"
-                                                                                                   round>{{ file_list.length }}</el-tag></span>
-                <br>
-                <br>
-              </div>
+                                                                                                 round>{{
+                total_size
+              }}</el-tag></span>
+            <br>
+            <span style="font-size: small;font-weight:bold;color: gray">当前仓库文件数：<el-tag effect="dark"
+                                                                                               round>{{
+                file_list.length
+              }}</el-tag></span>
+            <br>
+            <br>
+          </div>
 
-              <el-row>
-                <el-col :span="24">
-                  <el-button @click="listFile" size="small" class="btn1">获取当前仓库文件</el-button>
-                </el-col>
-                <el-col :span="24">
-                  <el-button @click="get_user_info" size="small" class="btn1">重新获取用户信息</el-button>
-                </el-col>
-              </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-button @click="listFile" size="small" class="btn1">获取当前仓库文件</el-button>
             </el-col>
+            <el-col :span="24">
+              <el-button @click="get_user_info" size="small" class="btn_1">重新获取用户信息</el-button>
+            </el-col>
+          </el-row>
+        </el-col>
       </el-row>
     </el-col>
     <el-col :span="16" :offset="1">
@@ -153,32 +157,36 @@
         <el-col :span="24" class="glass mg" style="padding: 10px" v-if="file_list.length>0">
           <el-row>
             <el-col :span="24">
-              <el-tag>
-                <img src="../../public/tiger.svg" style="width: 20px" alt="">
-                <label>选择图片填充方式</label>
-              </el-tag>
-              <el-button class="copy_btn" @click="listFile" size="small" style="margin-left: 1vw;border-radius: 20px">
-                <el-icon class="is-loading">
-                  <Loading/>
-                </el-icon>
-                刷新
-              </el-button>
-              <input type="text" ref="cp_input" id="cp_url" readonly>
-              <br><br>
-              <el-row class="glass" style="padding: 5px">
+              <el-row>
+                <el-col :span="8">
+                  <el-tag>
+                    <img src="../../public/tiger.svg" style="width: 20px" alt="">
+                    <label>选择图片填充方式</label>
+                  </el-tag>
+                </el-col>
+                <el-col :span="8">
+                  <input type="text" ref="cp_input" id="cp_url" readonly style="width: 0px">
+                </el-col>
+                <el-col :span="8" class="img_show">
+                  <img src="../../public/refresh.svg" @click="listFile" alt="" class="refresh_btn" title="刷新">
+                </el-col>
+              </el-row>
+              <el-row class="glass" style="padding: 5px;margin-top:2vh">
                 <el-col :span="24">
                   <el-button style="border-radius: 20px" type="primary" @click="fit = 'fill'">fill</el-button>
                   <el-button style="border-radius: 20px" type="primary" @click="fit = 'contain'">contain</el-button>
                   <el-button style="border-radius: 20px" type="primary" @click="fit = 'cover'">cover</el-button>
                   <el-button style="border-radius: 20px" type="primary" @click="fit = 'none'">none</el-button>
-                  <el-button style="border-radius: 20px" type="primary" @click="fit = 'scale-down'">scale-down</el-button>
+                  <el-button style="border-radius: 20px" type="primary" @click="fit = 'scale-down'">scale-down
+                  </el-button>
                 </el-col>
               </el-row>
             </el-col>
           </el-row>
           <el-row class="mg">
             <el-col v-for="(item,index) in file_show" :span="4" style="padding: 10px" :key="item.name">
-              <el-image :preview-teleported="true" style="width: 100%;height: 20vh;border-radius: 10px" :src="item.url" :fit="fit"
+              <el-image :preview-teleported="true" style="width: 100%;height: 20vh;border-radius: 10px" :src="item.url"
+                        :fit="fit"
                         loading="lazy" :preview-src-list="srcList" :initial-index="index"/>
               <span style="font-size: smaller;color: gray">文件大小：{{ (item.size / 1024).toFixed(2) }}KB</span>
               <p style="color: gray;font-size: smaller;white-space: nowrap;width: 90%;overflow: hidden;text-overflow:ellipsis;">
@@ -197,8 +205,9 @@
                       @confirm="delete_file(item.sha,item.filename)"
                   >
                     <template #reference>
-                      <el-button type="default" size="small" style="border-radius: 10px"><img src="../../public/delete.svg"
-                                                                                              style="width: 15px" alt="">
+                      <el-button type="default" size="small" style="border-radius: 10px"><img
+                          src="../../public/delete.svg"
+                          style="width: 15px" alt="">
                       </el-button>
                     </template>
                   </el-popconfirm>
@@ -221,7 +230,7 @@
 </template>
 
 <script setup>
-import {onBeforeMount, onMounted, onBeforeUpdate, ref, watch, reactive, toRefs} from 'vue';
+import {onBeforeMount, onBeforeUpdate, ref, watch} from 'vue';
 import {UploadFilled} from '@element-plus/icons-vue'
 import {ElNotification} from 'element-plus'
 
@@ -255,16 +264,15 @@ async function readClipboard() {
     for (const item of clipboardItems) {
       for (const type of item.types) {
         if (type.startsWith('image/')) {
-          open_notification("提示","成功读取剪贴板中的图片")
+          open_notification("提示", "成功读取剪贴板中的图片")
           const blob = await item.getType(type);
           blobToBase64(blob).then(b64 => {
             file_suffix.value = ".png"
             upload(b64);
           })
           break;
-        }
-        else {
-          open_notification("提示","剪贴板中的内容不是图片")
+        } else {
+          open_notification("提示", "剪贴板中的内容不是图片")
           break
         }
       }
@@ -331,10 +339,10 @@ const save_config = () => {
 onBeforeMount(() => {
   input_repo.value = localStorage.getItem("repo");
   input_token.value = localStorage.getItem("token");
-  if (localStorage.getItem("cdn")!== null){
+  if (localStorage.getItem("cdn") !== null) {
     input_cdn.value = localStorage.getItem("cdn");
   }
-  if (localStorage.getItem("url_format")!== null){
+  if (localStorage.getItem("url_format") !== null) {
     url_format.value = localStorage.getItem("url_format");
   }
   repo.value = input_repo.value;
@@ -342,7 +350,7 @@ onBeforeMount(() => {
   avatar_url.value = localStorage.getItem("avatar")
   name.value = localStorage.getItem("name")
   email.value = localStorage.getItem("email")
-  if (repo.value!==null && token.value !== null){
+  if (repo.value !== null && token.value !== null) {
     listFile()
   }
 })
@@ -398,22 +406,21 @@ const listFile = () => {
         let all_size = 0
         for (let i = 0; i < data.length; i++) {
           let cdn_url = ""
-          if (input_cdn.value === ""){
+          if (input_cdn.value === "") {
             cdn_url = "https://raw.githubusercontent.com/"
-          }
-          else {
+          } else {
             cdn_url = input_cdn.value
           }
-            data[i].download_url = data[i].download_url.substring(data[i].download_url.indexOf("/main"))
-            file_list.value.push({
-              "url": cdn_url + input_repo.value + data[i].download_url,
-              "size": data[i].size,
-              "name": data[i].name,
-              "sha": data[i].sha,
-              "filename": data[i].name
-            })
-            srcList.value.push(input_cdn.value + input_repo.value + data[i].download_url)
-            all_size = all_size + data[i].size
+          data[i].download_url = data[i].download_url.substring(data[i].download_url.indexOf("/main"))
+          file_list.value.push({
+            "url": cdn_url + input_repo.value + data[i].download_url,
+            "size": data[i].size,
+            "name": data[i].name,
+            "sha": data[i].sha,
+            "filename": data[i].name
+          })
+          srcList.value.push(input_cdn.value + input_repo.value + data[i].download_url)
+          all_size = all_size + data[i].size
         }
         if (all_size < 1024) {
           total_size.value = all_size + "B"
@@ -441,10 +448,9 @@ const copy_url = (url) => {
   let audio = new Audio('../../public/audio/audio1.wav');
   if (url !== null) {
     // let obj = document.getElementById("cp_url");
-    if (url_format.value === "md"){
-      url = "!["+ url.substring(url.indexOf("/main/")+6)+"](" + url + ")"
-    }
-    else if (url_format.value === "href") {
+    if (url_format.value === "md") {
+      url = "![" + url.substring(url.indexOf("/main/") + 6) + "](" + url + ")"
+    } else if (url_format.value === "href") {
       url = "<a href=\"" + url + "\">" + url.substring(url.indexOf("/main/") + 6) + "</a>"
     }
     let obj = cp_input.value;
@@ -513,16 +519,15 @@ const get_user_info = () => {
 }
 
 watch(() => [current_page.value, url_format.value],
-    ([newVal, newVal2],[oldVal, oldVal2]) => {
+    ([newVal, newVal2], [oldVal, oldVal2]) => {
       if (newVal !== oldVal) {
         file_show.value = []
         file_show.value = file_list.value.slice((newVal - 1) * 12, newVal * 12)
       }
-      if(newVal2 !== oldVal2){
-        if (newVal2 === "" || newVal2 === null ){
+      if (newVal2 !== oldVal2) {
+        if (newVal2 === "" || newVal2 === null) {
           localStorage.removeItem("url_format")
-        }
-        else {
+        } else {
           localStorage.setItem("url_format", newVal2)
         }
       }
@@ -531,10 +536,6 @@ watch(() => [current_page.value, url_format.value],
 </script>
 
 <style>
-.flex-grow {
-  flex-grow: 1;
-}
-
 .mg {
   margin-top: 1vh;
 }
@@ -585,11 +586,29 @@ watch(() => [current_page.value, url_format.value],
   font-weight: bolder;
 }
 
+.btn_1 {
+  width: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(241, 255, 171, 1) 0%, rgba(130, 255, 249, 1) 50%, rgba(204, 193, 255, 1) 100%);
+  animation: gradientBG 30s ease infinite;
+  background-size: 300% 300%;
+  font-weight: bolder;
+}
+
 .btn1 {
   width: 100%;
   border-radius: 10px;
   background: linear-gradient(90deg, rgba(157, 135, 255, 1) 0%, rgba(48, 255, 245, 1) 50%, rgba(198, 255, 70, 1) 100%);
   animation: gradientBG 15s ease infinite;
+  background-size: 300% 300%;
+  font-weight: bolder;
+}
+
+.btn1 {
+  width: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(157, 135, 255, 1) 0%, rgba(48, 255, 245, 1) 50%, rgba(198, 255, 70, 1) 100%);
+  animation: gradientBG 30s ease infinite;
   background-size: 300% 300%;
   font-weight: bolder;
 }
@@ -602,21 +621,24 @@ watch(() => [current_page.value, url_format.value],
   scale: 1.05;
 }
 
-.nav_github_btn {
-  height: 100%;
-  background-image: url('../../public/github.png');
-  background-size: cover;
-  border: none;
-  border-radius: 50px
-}
-
-#cp_url{
+#cp_url {
   opacity: 100;
   border: none;
   background: transparent;
   color: transparent;
 }
-#cp_url:focus{
+
+#cp_url:focus {
   outline: none;
+}
+.img_show{
+  text-align: right;
+}
+.refresh_btn{
+  width: 20px;
+  transition: 1s;
+}
+.refresh_btn:hover{
+  transform: rotate(180deg);
 }
 </style>
