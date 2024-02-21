@@ -445,7 +445,6 @@ const listFile = () => {
 }
 
 const copy_url = (url) => {
-  let audio = new Audio('../../public/audio/audio1.wav');
   if (url !== null) {
     // let obj = document.getElementById("cp_url");
     if (url_format.value === "md") {
@@ -458,7 +457,6 @@ const copy_url = (url) => {
     obj.select();
     open_notification("复制url", "已复制到剪贴板:" + obj.value)
     document.execCommand("copy");
-    audio.play();
   }
 }
 
