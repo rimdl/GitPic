@@ -165,7 +165,7 @@
                   </el-tag>
                 </el-col>
                 <el-col :span="8">
-                  <input type="text" ref="cp_input" id="cp_url" readonly style="width: 0px">
+                  <input type="text" ref="cp_input" id="cp_url" readonly style="width: 1px">
                 </el-col>
                 <el-col :span="8" class="img_show">
                   <img src="../../public/refresh.svg" @click="listFile" alt="" class="refresh_btn" title="刷新">
