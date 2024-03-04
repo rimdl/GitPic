@@ -25,7 +25,7 @@
       <br>
     </el-col>
 
-    <el-col :span="5" :offset="1">
+    <el-col :lg="5" :md="22" :sm="22" :xs="22" :offset="1">
       <el-row class="glass config">
         <el-col :span="24">
           <img src="../../public/github.svg" alt="" style="width: 20px">
@@ -77,7 +77,7 @@
           </el-row>
         </el-col>
       </el-row>
-      <el-row class="mg" v-if="repo !== null && token !== null">
+      <el-row class="mg" style="margin-bottom: 2vh" v-if="repo !== null && token !== null">
         <el-col :span="24" style="text-align: center;padding: 10px" class="glass">
           <a :href="'https://github.com/'+repo" target="_blank">
             <el-avatar :size="50" :src="avatar_url"/>
@@ -112,7 +112,7 @@
         </el-col>
       </el-row>
     </el-col>
-    <el-col :span="16" :offset="1">
+    <el-col :lg="16" :offset="1" :md="22" :sm="22" :xs="22">
       <el-row v-if="name">
         <el-col :span="24" v-if="name">
           <el-upload
@@ -184,7 +184,7 @@
             </el-col>
           </el-row>
           <el-row class="mg">
-            <el-col v-for="(item,index) in file_show" :span="4" style="padding: 10px" :key="item.name">
+            <el-col v-for="(item,index) in file_show" :lg="4" :md="6" :sm="8" :xs="12" style="padding: 10px" :key="item.name">
               <el-image :preview-teleported="true" style="width: 100%;height: 20vh;border-radius: 10px" :src="item.url"
                         :fit="fit"
                         loading="lazy" :preview-src-list="srcList" :initial-index="(current_page-1)*12+index"/>
@@ -222,7 +222,18 @@
             </el-col>
           </el-row>
         </el-col>
+
+
       </el-row>
+    </el-col>
+    <el-col :span="24">
+      <div class="footer">
+        <h2>GitPic</h2>
+        <span>项目地址：<a style="color: black" href="https://github.com/rimdl/GitPic">GitPic</a></span>
+        <p>
+          copyright &copy; 2023-2024 <a style="text-decoration: none;color: gray" href="https://github.com/rimdl">@XinSi</a>
+        </p>
+      </div>
     </el-col>
   </el-row>
 
@@ -256,6 +267,9 @@ const disabled_upload = ref(false)
 const url_format = ref('')
 
 const cp_input = ref(null)
+
+import { useClipboard } from '@vueuse/core'
+const { copy, isSupported } = useClipboard({legacy:true })
 
 async function readClipboard() {
   try {
@@ -446,17 +460,14 @@ const listFile = () => {
 
 const copy_url = (url) => {
   if (url !== null) {
-    // let obj = document.getElementById("cp_url");
     if (url_format.value === "md") {
       url = "![" + url.substring(url.indexOf("/main/") + 6) + "](" + url + ")"
     } else if (url_format.value === "href") {
       url = "<a href=\"" + url + "\">" + url.substring(url.indexOf("/main/") + 6) + "</a>"
     }
-    let obj = cp_input.value;
-    obj.value = url;
-    obj.select();
-    open_notification("复制url", "已复制到剪贴板:" + obj.value)
-    document.execCommand("copy");
+    copy(url).then(() => {
+      open_notification("复制url", "已复制到剪贴板: " + url)
+    })
   }
 }
 
@@ -638,5 +649,8 @@ watch(() => [current_page.value, url_format.value],
 }
 .refresh_btn:hover{
   transform: rotate(180deg);
+}
+.footer{
+  text-align: center;
 }
 </style>
