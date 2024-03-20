@@ -4,13 +4,13 @@
       <a href="https://github.com/rimdl/gitpic" target="_blank" style="text-decoration: none" title="查看此项目源代码">
         <img
             style="width: 50px;border-radius: 10px"
-            src="../../public/logo.jpg"
+            src="../../public/logo2.svg"
             alt="GitPic"
         />
-        <span style="font-size: 50px;color: rgba(255, 220, 52);font-weight: bolder">G</span>
-        <span style="font-size: 50px;color: rgba(72, 201, 255);font-weight: bolder">it</span>
-        <span style="font-size: 50px;color: rgba(141, 114, 255);font-weight: bolder">P</span>
-        <span style="font-size: 50px;color: rgba(189, 52, 254);font-weight: bolder">ic</span>
+<!--        <span style="font-size: 50px;color: rgba(255, 220, 52);font-weight: bolder">G</span>-->
+<!--        <span style="font-size: 50px;color: rgba(72, 201, 255);font-weight: bolder">it</span>-->
+<!--        <span style="font-size: 50px;color: rgba(141, 114, 255);font-weight: bolder">P</span>-->
+<!--        <span style="font-size: 50px;color: rgba(189, 52, 254);font-weight: bolder">ic</span>-->
       </a>
     </el-col>
 
@@ -577,7 +577,7 @@ watch(() => [current_page.value, url_format.value],
 }
 
 .nav {
-  background: linear-gradient(0deg, rgba(192, 242, 255, 1) 0%, rgba(190, 255, 217, 1) 100%);
+  background: white;
   height: 100%;
   animation: gradientBG 15s ease infinite;
   background-size: 300% 300%;
